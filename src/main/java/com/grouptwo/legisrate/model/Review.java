@@ -1,4 +1,4 @@
-package com.sg.model;
+package com.grouptwo.legisrate.model;
 
 import java.util.Objects;
 

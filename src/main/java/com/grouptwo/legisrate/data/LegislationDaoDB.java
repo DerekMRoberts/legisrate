@@ -1,6 +1,10 @@
-package com.sg.data;
+package com.grouptwo.legisrate.data;
 
-import com.sg.model.Legislation;
+import com.grouptwo.legisrate.model.Legislation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +21,16 @@ import java.util.List;
  * LegislationDaoDB
  * The legislation data-access-object interface
  */
+@Repository
+@Profile("database")
 public class LegislationDaoDB {
+
+    private final JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    public LegislationDaoDB(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     /**
      * Adds new legislation to the `Legislation` table in the database

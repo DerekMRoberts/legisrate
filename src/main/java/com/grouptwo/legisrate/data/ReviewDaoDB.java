@@ -1,6 +1,10 @@
-package com.sg.data;
+package com.grouptwo.legisrate.data;
 
-import com.sg.model.Review;
+import com.grouptwo.legisrate.model.Review;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +21,16 @@ import java.util.List;
  * ReviewDaoDB
  * The review data-access-object interface
  */
-public class ReviewDaoDB {
+@Repository
+@Profile("database")
+public class ReviewDaoDB implements ReviewDao {
+
+    private final JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    public ReviewDaoDB(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     /**
      * Adds a new review to the `Reviews` table in the database

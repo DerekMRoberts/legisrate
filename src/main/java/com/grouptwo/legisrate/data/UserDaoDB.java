@@ -1,6 +1,10 @@
-package com.sg.data;
+package com.grouptwo.legisrate.data;
 
-import com.sg.model.User;
+import com.grouptwo.legisrate.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,13 +21,23 @@ import java.util.List;
  * UserDaoDB
  * The user data-access-object interface
  */
-public class UserDaoDB {
+@Repository
+@Profile("database")
+public class UserDaoDB implements UserDao {
+
+    private final JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    public UserDaoDB(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     /**
      * Adds a new user to the `Users` table in the database
      * @param user the new user
      * @return the new user updated with an auto-generated userID
      */
+    @Override
     public User add(User user) {
         return new User();
     }
@@ -32,6 +46,7 @@ public class UserDaoDB {
      * Gets a list of all users from the `Users` table in the database
      * @return a list of all users
      */
+    @Override
     public List<User> getAllUsers() {
         return new ArrayList<>();
     }
@@ -41,6 +56,7 @@ public class UserDaoDB {
      * @param userID the ID of the specified user
      * @return the specified user
      */
+    @Override
     public User getUser(int userID) {
         return new User();
     }
@@ -50,6 +66,7 @@ public class UserDaoDB {
      * @param user the specified user
      * @return true if the specified user exists and is updated
      */
+    @Override
     public boolean update(User user) {
         return true;
     }
@@ -59,6 +76,7 @@ public class UserDaoDB {
      * @param userID the ID of the specified user
      * @return true if the specified user exists and is deleted
      */
+    @Override
     public boolean delete(int userID) {
         return true;
     }

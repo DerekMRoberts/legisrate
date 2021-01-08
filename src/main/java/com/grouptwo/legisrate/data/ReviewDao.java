@@ -1,6 +1,6 @@
-package com.sg.data;
+package com.grouptwo.legisrate.data;
 
-import com.sg.model.Review;
+import com.grouptwo.legisrate.model.Review;
 
 import java.util.List;
 

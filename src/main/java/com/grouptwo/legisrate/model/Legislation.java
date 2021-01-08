@@ -1,4 +1,4 @@
-package com.sg.model;
+package com.grouptwo.legisrate.model;
 
 import java.util.Objects;
 
@@ -69,6 +69,19 @@ public class Legislation {
 
     public void setPdfUrl(String pdfUrl) {
         this.pdfUrl = pdfUrl;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Legislation that = (Legislation) o;
+        return legislationID == that.legislationID && active == that.active && Objects.equals(title, that.title) && Objects.equals(sponsor, that.sponsor) && Objects.equals(summary, that.summary) && Objects.equals(pdfUrl, that.pdfUrl);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(legislationID, title, sponsor, active, summary, pdfUrl);
     }
 
 }
