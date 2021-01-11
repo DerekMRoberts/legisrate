@@ -1,6 +1,6 @@
 import logo from "../logo.svg"
 import React from "react"
- 
+
 function HomePage() {
     return (
         <div id="home_page" className="App-page App-header">
@@ -19,5 +19,5 @@ function HomePage() {
         </div>
     )
 }
- 
+
 export default HomePage
