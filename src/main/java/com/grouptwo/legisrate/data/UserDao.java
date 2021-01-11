@@ -23,33 +23,33 @@ public interface UserDao {
      * @param user the new user
      * @return the new user updated with an auto-generated userID
      */
-    public User add(User user);
+    User add(User user);
 
     /**
      * Gets a list of all users from the `Users` table in the database
      * @return a list of all users
      */
-    public List<User> getAllUsers();
+    List<User> getAllUsers();
 
     /**
      * Gets a specified user from the `Users` table in the database
      * @param userID the ID of the specified user
      * @return the specified user
      */
-    public User getUser(int userID);
+    User getUser(int userID);
 
     /**
      * Updates a specified user in the `Users` table in the database
      * @param user the specified user
      * @return true if the specified user exists and is updated
      */
-    public boolean update(User user);
+    boolean update(User user);
 
     /**
      * Deletes a specified user from the `Users` table in the database
      * @param userID the ID of the specified user
      * @return true if the specified user exists and is deleted
      */
-    public boolean delete(int userID);
+    boolean delete(int userID);
 
 }

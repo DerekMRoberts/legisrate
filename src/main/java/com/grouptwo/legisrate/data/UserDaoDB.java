@@ -3,10 +3,13 @@ package com.grouptwo.legisrate.data;
 import com.grouptwo.legisrate.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
+import java.sql.*;
 import java.util.List;
 
 /**
@@ -27,6 +30,10 @@ public class UserDaoDB implements UserDao {
 
     private final JdbcTemplate jdbcTemplate;
 
+    /**
+     * Constructs the UserDaoDB class
+     * @param jdbcTemplate the JDBC Template
+     */
     @Autowired
     public UserDaoDB(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -39,7 +46,18 @@ public class UserDaoDB implements UserDao {
      */
     @Override
     public User add(User user) {
-        return new User();
+        final String sql = "INSERT INTO `Users`(`Username`, `State`/*, `Email`, `Password`*/) VALUES(?, ?/*, ?, ?*/);";
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update((Connection conn) -> {
+            PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, user.getUsername());
+            statement.setString(2, user.getState());
+//            statement.setString(3, user.getEmail());
+//            statement.setString(4, user.getPassword());
+            return statement;
+        }, keyHolder);
+        user.setUserID(keyHolder.getKey().intValue());
+        return user;
     }
 
     /**
@@ -48,7 +66,8 @@ public class UserDaoDB implements UserDao {
      */
     @Override
     public List<User> getAllUsers() {
-        return new ArrayList<>();
+        final String sql = "SELECT `UserId`, `Username`, `State`/*, `Email`, `Password`*/ FROM `Users`;";
+        return jdbcTemplate.query(sql, new UserMapper());
     }
 
     /**
@@ -58,7 +77,12 @@ public class UserDaoDB implements UserDao {
      */
     @Override
     public User getUser(int userID) {
-        return new User();
+        try {
+            final String sql = "SELECT `UserId`, `Username`, `State`/*, `Email`, `Password`*/ FROM `Users` WHERE `UserId` = ?;";
+            return jdbcTemplate.queryForObject(sql, new UserMapper(), userID);
+        } catch (DataAccessException e) {
+            return null;
+        }
     }
 
     /**
@@ -68,7 +92,8 @@ public class UserDaoDB implements UserDao {
      */
     @Override
     public boolean update(User user) {
-        return true;
+        final String sql = "UPDATE `Users` SET `Username` = ?, `State` = ?/*, `Email` = ?, `Password` = ?*/ WHERE `UserId` = ?;";
+        return jdbcTemplate.update(sql, user.getUsername(), user.getState(),/* user.getEmail(), user.getPassword(),*/ user.getUserID()) > 0;
     }
 
     /**
@@ -78,7 +103,33 @@ public class UserDaoDB implements UserDao {
      */
     @Override
     public boolean delete(int userID) {
-        return true;
+        final String sql = "DELETE FROM `Users` WHERE `UserId` = ?;";
+        return jdbcTemplate.update(sql, userID) > 0;
+    }
+
+    /**
+     * The user mapper class
+     */
+    private static final class UserMapper implements RowMapper<User> {
+
+        /**
+         * Maps database rows to User objects
+         * @param rs the result set
+         * @param index the index of the current row
+         * @return the User object
+         * @throws SQLException an SQL exception
+         */
+        @Override
+        public User mapRow(ResultSet rs, int index) throws SQLException {
+            User user = new User();
+            user.setUserID(rs.getInt("UserId"));
+            user.setUsername(rs.getString("Username"));
+            user.setState(rs.getString("State"));
+//            user.setEmail(rs.getString("Email"));
+//            user.setPassword(rs.getString("Password"));
+            return user;
+        }
+
     }
 
 }
