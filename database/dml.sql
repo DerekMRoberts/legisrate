@@ -21,8 +21,8 @@ INSERT INTO Users (Username, State) VALUES
 
 
 -- Sample Reviews
-INSERT INTO Review (UserComment, Rating ) VALUES 
-("This is a terrible bill, I feel that it does not adequantly attend to the needs of the people" , "1"), 
-("I like this bill and believe it should be passed as it gives me the opportunity to change my life" , "5"),
-("Im neutral and dont care if this bill is passed or not", "3");
+INSERT INTO Review (LegislatureId, UserId, UserComment, Rating ) VALUES 
+("1", "1", "This is a terrible bill, I feel that it does not adequantly attend to the needs of the people" , "1"), 
+("2", "3", "I like this bill and believe it should be passed as it gives me the opportunity to change my life" , "5"),
+("3", "4" ,  "Im neutral and dont care if this bill is passed or not", "3");
 

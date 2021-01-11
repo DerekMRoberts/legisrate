@@ -18,9 +18,11 @@ create table Users (
 
 create table Review (
 		ReviewId int primary key auto_increment not null,
-		foreign key fk_Reviews_Legislation(ReviewId)
+        LegislatureId int not null, 
+        UserID int not null, 
+		foreign key fk_Reviews_Legislation(LegislatureId)
 				references Legislation(LegislatureId),
-		foreign key fk_Reviews_Users(ReviewId)
+		foreign key fk_Reviews_Users(UserId)
 				references Users(UserId),
 		UserComment varchar(100) not null,
 		Rating int not null
