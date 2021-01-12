@@ -139,12 +139,11 @@ public class LegislationController {
      * @return a list of reviews with the specified legislationID if successful, otherwise the http 404 Not Found status code
      */
     @GetMapping("/review/{legislationID}")
-    public List<Review> getReviewsByLegislationID(@PathVariable int legislationID) {
-//        if (legislationDao.getLegislation(legislationID) == null)
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<List<Review>> getReviewsByLegislationID(@PathVariable int legislationID) {
+        if (legislationDao.getLegislation(legislationID) == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-//        return ResponseEntity.ok(reviewDao.getReviewsByLegislationID(legislationID));
-        return reviewDao.getReviewsByLegislationID(legislationID);
+        return ResponseEntity.ok(reviewDao.getReviewsByLegislationID(legislationID));
     }
 
     /**
