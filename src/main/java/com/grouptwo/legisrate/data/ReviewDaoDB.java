@@ -86,6 +86,20 @@ public class ReviewDaoDB implements ReviewDao {
     }
 
     /**
+     * Gets a list of reviews with the specified legislationID from the `Reviews` table in the database
+     * @param legislationID the ID of the specified legislation
+     * @return the list of reviews with the specified legislationID
+     */
+    public List<Review> getReviewsByLegislationID(int legislationID) {
+        try {
+            final String sql = "SELECT `ReviewId`, `LegislatureId`, `UserId`, `UserComment`, `Rating` FROM `Review` WHERE `LegislatureId` = ?;";
+            return jdbcTemplate.query(sql, new ReviewMapper(), legislationID);
+        } catch (DataAccessException e) {
+            return null;
+        }
+    }
+
+    /**
      * Updates a specified user in the `Reviews` table in the database
      * @param review the specified review
      * @return true if the specified review exists and is updated
