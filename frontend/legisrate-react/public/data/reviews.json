@@ -1,0 +1,23 @@
+[
+	{
+		"ReviewId" : 1,
+		"LegislatureId" : 1,
+		"UserID" : 1,
+		"UserComment" : "This is a terrible bill, I feel that it does not adequantly attend to the needs of the people",
+		"Rating" : 1
+	},
+	{
+		"ReviewId" : 2,
+		"LegislatureId" : 2,
+		"UserID" : 3,
+		"UserComment" : "I like this bill and believe it should be passed as it gives me the opportunity to change my life",
+		"Rating" : 5
+	},
+	{
+		"ReviewId" : 3,
+		"LegislatureId" : 3,
+		"UserID" : 4,
+		"UserComment" : "Im neutral and dont care if this bill is passed or not",
+		"Rating" : 3
+	}
+]

@@ -1,7 +1,8 @@
 import React from 'react'
 
 function AboutPage() {
-    const developerName = '<YOUR_NAME_HERE>'
+    const developerName = 'Rosalinda P'
+    const developerName2 = 'Derek R'
     return (
         <div id="about_page" className="App-page">
             <h1>Our Project</h1>
@@ -10,7 +11,7 @@ function AboutPage() {
             </p>
             <h2>Team</h2>
             <p>
-                Lead Developer: {developerName}
+                Contributing Developers: {developerName}
             </p>
         </div>
     )

@@ -1,0 +1,22 @@
+[
+	{
+		"UserId" : 1,
+		"Username" : "Aosaliu",
+		"State" : "NY"
+	},
+	{
+		"UserId" : 2,
+		"Username" : "Rdtaylorjr",
+		"State" : "NY"
+	},
+	{
+		"UserId" : 3,
+		"Username" : "JMRondello",
+		"State" : "NY"
+	},
+	{
+		"UserId" : 4,
+		"Username" : "RoseBudmaria",
+		"State" : "NY"
+	}
+]
