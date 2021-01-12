@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {MDBBtn, MDBDataTable} from 'mdbreact';
 import { view } from '@risingstack/react-easy-state'
+import {NavLink} from 'react-router-dom'
 
 const SERVICE_URL = "http://localhost:3000/api"
 
@@ -95,7 +96,13 @@ class BillTable extends Component {
                 summary: object.summary,
                 active: this.activeToString(object.active),
                 reviewModal: <MDBBtn color="blue-grey" outline size="sm">Leave a Review</MDBBtn>,
-                reviewTable: <MDBBtn color="blue-grey" outline size="sm">View Reviews</MDBBtn>
+                reviewTable: <NavLink activeClassName="active" to={/*{
+                    pathname:'/reviews',
+                    state: {legislationId: object.legislationId}
+                }*/"/reviews"} legislationid={object.legislationID}>
+                                <MDBBtn color="blue-grey" outline size="sm">View Reviews</MDBBtn>
+                             </NavLink>
+
             }
         })
     }
