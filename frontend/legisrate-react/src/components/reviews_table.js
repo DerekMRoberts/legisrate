@@ -7,9 +7,8 @@ class ReviewsTable extends React.Component {
 
     constructor(props) {
         super(props);
-        //console.log(props)
         this.state = {
-            legislationId: props.legislationId,
+            legislationID: props.legislationID,
             loading: false,
             reviewData: [{
             }]
@@ -17,11 +16,9 @@ class ReviewsTable extends React.Component {
     }
 
     fetchReviews() {
-        console.log("Table is now mounted.")
         this.setState({ loading: true })
         console.log("Loading review data")
-        console.log(SERVICE_URL + "/review/" + this.state.legislationId)
-        fetch(SERVICE_URL + "/review/" + this.state.legislationId)
+        fetch(SERVICE_URL + "/review/" + this.state.legislationID)
             .then(response => response.json())
             .then(result => {
                 this.setState({reviewData: result, loading: false})
@@ -77,7 +74,7 @@ class ReviewsTable extends React.Component {
     }
 
     parseText(text) {
-        let parser = new DOMParser;
+        let parser = new DOMParser();
         let dom = parser.parseFromString(
             '<!doctype html><body>' + text,
             'text/html');

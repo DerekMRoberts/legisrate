@@ -16,7 +16,6 @@ class BillTable extends Component {
     }
 
     fetchLegislation() {
-        console.log("Table is now mounted.")
         this.setState({ loading: true })
         console.log("Loading legislation data")
         fetch(SERVICE_URL + "/legislation")
@@ -68,7 +67,7 @@ class BillTable extends Component {
     }
 
     parseText(text) {
-        let parser = new DOMParser;
+        let parser = new DOMParser();
         let dom = parser.parseFromString(
             '<!doctype html><body>' + text,
             'text/html');
@@ -89,7 +88,6 @@ class BillTable extends Component {
 
     getRows(legislationData) {
         // Handle null case before reviews data is loaded
-        console.log(this.state.legislationData)
         if ( legislationData == null || typeof( legislationData) == 'undefined') {
             return [{
                 title: "Didn't Work",
