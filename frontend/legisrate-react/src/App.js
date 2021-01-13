@@ -1,11 +1,10 @@
 import React, { Component } from "react"
-import { Switch, Route } from "react-router-dom"
+import {Switch, Route} from "react-router-dom"
 import './App.css'
 import NavBar from "./components/nav_bar"
 import HomePage from './pages/home_page'
 import AboutPage from './pages/about_page'
-
-const SERVICE_URL = "http://localhost:3000/api"
+import ReviewsPage from "./pages/reviews_page";
 
 class App extends Component {
     render() {
@@ -14,9 +13,10 @@ class App extends Component {
                 <NavBar />
                 <main>
                     <Switch>
-                        <Route exact path='/' component={HomePage}/>
-                        <Route path='/home' component={HomePage}/>
-                        <Route path='/about' component={AboutPage}/>
+                        <Route exact path='/' component={HomePage} />
+                        <Route path='/home' component={HomePage} />
+                        <Route path='/reviews' component={ReviewsPage}/>
+                        <Route path='/about' component={AboutPage} />
                     </Switch>
                 </main>
             </div>
