@@ -4,20 +4,22 @@ import {MDBDataTable} from "mdbreact";
 const SERVICE_URL = "http://localhost:3000/api"
 
 class ReviewsPage extends React.Component {
+
     constructor(props) {
         super(props);
         this.state = {
-            legislationId: props.legislationid,
+            legislationId: props.location.aboutProps.legislationID,
             loading: false,
             reviewData: [{
             }]
         }
     }
 
-    /*fetchReviews() {
+    fetchReviews() {
         console.log("Table is now mounted.")
         this.setState({ loading: true })
         console.log("Loading review data")
+        console.log(SERVICE_URL + "/review/" + this.state.legislationId)
         fetch(SERVICE_URL + "/review/" + this.state.legislationId)
             .then(response => response.json())
             .then(result => {
@@ -27,7 +29,7 @@ class ReviewsPage extends React.Component {
 
     componentDidMount() {
         this.fetchReviews()
-    }*/
+    }
 
     render() {
         const data = {
@@ -59,6 +61,18 @@ class ReviewsPage extends React.Component {
         return reviewTableColumns
     }
 
+    getUsername(object) {
+        if (object.hasOwnProperty("user")) {
+            return object["user"].username
+        }
+    }
+
+    getState(object) {
+        if (object.hasOwnProperty("user")) {
+            return object["user"].state
+        }
+    }
+
     getRows(reviewData) {
         // Handle null case before reviews data is loaded
         if ( reviewData == null || typeof( reviewData) == 'undefined') {
@@ -70,10 +84,10 @@ class ReviewsPage extends React.Component {
 
         return reviewData.map((object)=> {
             return {
-                /*username: object.user.username,
-                state: object.user.state,
+                username: this.getUsername(object),
+                state: this.getState(object),
                 rating: object.rating,
-                comments: object.comments*/
+                comments: object.comments
             }
         })
     }

@@ -28,12 +28,6 @@ class BillTable extends Component {
 
     componentDidMount() {
         this.fetchLegislation()
-        this.timer = setInterval(() => this.fetchLegislation(), 5000);
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.timer);
-        this.timer = null;
     }
 
     render() {
@@ -66,17 +60,18 @@ class BillTable extends Component {
 
     getColumns() {
         const legislationTableColumns = [
-            { label: 'Title', field: 'title', sort: 'asc', width: 50 },
-            { label: 'Summary', field: 'summary', sort: 'asc', width: 75 },
-            { label: 'Enacted', field: 'active', sort: 'asc', width: 5 },
-            { label: '', field: 'reviewModal', sort: 'asc', width: 20 },
-            { label: '', field: 'reviewTable', sort: 'asc', width: 20 },
+            { label: 'Title', field: 'title', sort: 'asc', width: 70 },
+            { label: 'Summary', field: 'summary', sort: 'asc', width: 250 },
+            { label: 'Enacted', field: 'active', sort: 'disabled', width: 25 },
+            { label: '', field: 'reviewModal', sort: 'disabled', width: 10 },
+            { label: '', field: 'reviewTable', sort: 'disabled', width: 10 },
         ]
         return legislationTableColumns
     }
 
     getRows(legislationData) {
         // Handle null case before reviews data is loaded
+        console.log(this.state.legislationData)
         if ( legislationData == null || typeof( legislationData) == 'undefined') {
             return [{
                 title: "Didn't Work",
@@ -96,10 +91,10 @@ class BillTable extends Component {
                 summary: object.summary,
                 active: this.activeToString(object.active),
                 reviewModal: <MDBBtn color="blue-grey" outline size="sm">Leave a Review</MDBBtn>,
-                reviewTable: <NavLink activeClassName="active" to={/*{
+                reviewTable: <NavLink activeClassName="active" to={{
                     pathname:'/reviews',
-                    state: {legislationId: object.legislationId}
-                }*/"/reviews"} legislationid={object.legislationID}>
+                    aboutProps: {legislationID: object.legislationID}
+                }}>
                                 <MDBBtn color="blue-grey" outline size="sm">View Reviews</MDBBtn>
                              </NavLink>
 

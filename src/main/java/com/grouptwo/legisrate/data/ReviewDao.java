@@ -39,6 +39,13 @@ public interface ReviewDao {
     Review getReview(int reviewID);
 
     /**
+     * Gets a list of reviews from the `Reviews` table in the database
+     * @param legislationID the ID of the specified legislation
+     * @return the specified review
+     */
+    List<Review> getReviewsByLegislationID(int legislationID);
+
+    /**
      * Updates a specified user in the `Reviews` table in the database
      * @param review the specified review
      * @return true if the specified review exists and is updated
