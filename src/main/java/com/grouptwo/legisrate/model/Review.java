@@ -24,6 +24,7 @@ public class Review {
     private int legislationID;
     @NotNull(message = "User ID must not be empty.")
     private int userID;
+    private User user;
     private String comments;
     private int rating;
 
@@ -105,6 +106,22 @@ public class Review {
      */
     public void setRating(int rating) {
         this.rating = rating;
+    }
+
+    /**
+     * Gets the user who left the review
+     * @return the user
+     */
+    public User getUser() {
+        return user;
+    }
+
+    /**
+     * Sets the user who left the review
+     * @param user the user
+     */
+    public void setUser(User user) {
+        this.user = user;
     }
 
     /**

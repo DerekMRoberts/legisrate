@@ -1,9 +1,11 @@
 package com.grouptwo.legisrate.data;
 
 import com.grouptwo.legisrate.model.Review;
+import com.grouptwo.legisrate.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -86,6 +88,22 @@ public class ReviewDaoDB implements ReviewDao {
     }
 
     /**
+     * Gets a list of reviews from the `Reviews` table in the database
+     * @param legislationID the ID of the specified legislation
+     * @return the reviews
+     */
+    @Override
+    public List<Review> getReviewsByLegislationID(int legislationID) {
+        try {
+            final String sql = "SELECT r.ReviewId, r.LegislatureId, r.UserId, u.Username, u.State, r.UserComment," +
+                    " r.Rating FROM Review r INNER JOIN Users u ON u.UserId = r.UserId WHERE r.LegislatureId = ?;";
+            return jdbcTemplate.query(sql, new ReviewWithUserMapper(), legislationID);
+        } catch (DataAccessException e) {
+            return null;
+        }
+    }
+
+    /**
      * Updates a specified user in the `Reviews` table in the database
      * @param review the specified review
      * @return true if the specified review exists and is updated
@@ -111,7 +129,6 @@ public class ReviewDaoDB implements ReviewDao {
      * The review mapper class
      */
     private static final class ReviewMapper implements RowMapper<Review> {
-
         /**
          * Maps database rows to Review objects
          * @param rs the result set
@@ -127,6 +144,33 @@ public class ReviewDaoDB implements ReviewDao {
             review.setUserID(rs.getInt("UserId"));
             review.setComments(rs.getString("UserComment"));
             review.setRating(rs.getInt("Rating"));
+            return review;
+        }
+
+    }
+
+    private static final class ReviewWithUserMapper implements RowMapper<Review> {
+        /**
+         * Maps database rows to Review objects
+         * @param rs the result set
+         * @param index the index of the current row
+         * @return the Review object
+         * @throws SQLException an SQL exception
+         */
+        @Override
+        public Review mapRow(ResultSet rs, int index) throws SQLException {
+            Review review = new Review();
+            review.setReviewID(rs.getInt("ReviewId"));
+            review.setLegislationID(rs.getInt("LegislatureId"));
+            review.setUserID(rs.getInt("UserId"));
+            review.setComments(rs.getString("UserComment"));
+            review.setRating(rs.getInt("Rating"));
+            User user = new User();
+            user.setUserID(rs.getInt("UserId"));
+            user.setUsername(rs.getString("Username"));
+            user.setState(rs.getString("State"));
+            review.setUser(user);
+
             return review;
         }
 
