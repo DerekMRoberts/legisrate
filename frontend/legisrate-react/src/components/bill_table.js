@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {MDBBtn, MDBDataTable} from 'mdbreact';
+import {MDBBtn, MDBDataTableV5 } from 'mdbreact';
 import { view } from '@risingstack/react-easy-state'
 import {NavLink} from 'react-router-dom'
 
@@ -36,17 +36,20 @@ class BillTable extends Component {
             rows: this.getRows(this.state.legislationData)
         }
         return (
-
-            <
-                MDBDataTable
-                striped
-                bordered
-                hover
-                scrollX
-                responsive
-                maxHeight="70vh"
-                data={data}
-            />
+            <div className="container-fluid">
+                <
+                    MDBDataTableV5
+                    hover
+                    entriesOptions={[5, 10, 15]}
+                    entries={5}
+                    maxHeight="70vh"
+                    autoWidth
+                    data={data}
+                    pagingTop
+                    searchTop
+                    searchBottom={false}
+                />
+            </div>
         )
     }
 
@@ -58,11 +61,26 @@ class BillTable extends Component {
         }
     }
 
+    getFixedAvg(object) {
+        if (object.hasOwnProperty("avgRating")) {
+            return object["avgRating"].toFixed(2)
+        }
+    }
+
+    parseText(text) {
+        let parser = new DOMParser;
+        let dom = parser.parseFromString(
+            '<!doctype html><body>' + text,
+            'text/html');
+        return dom.body.textContent;
+    }
+
     getColumns() {
         const legislationTableColumns = [
-            { label: 'Title', field: 'title', sort: 'asc', width: 70 },
-            { label: 'Summary', field: 'summary', sort: 'asc', width: 250 },
-            { label: 'Enacted', field: 'active', sort: 'disabled', width: 25 },
+            { label: 'Title', field: 'title', sort: 'disabled', width: 30},
+            { label: 'Summary', field: 'summary', sort: 'disabled', width: 40 },
+            { label: 'Avg. Rating', field: 'avgRating', sort: 'asc', width: 10 },
+            { label: 'Enacted', field: 'active', sort: 'disabled', width: 10 },
             { label: '', field: 'reviewModal', sort: 'disabled', width: 10 },
             { label: '', field: 'reviewTable', sort: 'disabled', width: 10 },
         ]
@@ -87,17 +105,16 @@ class BillTable extends Component {
 
         return legislationData.map((object)=> {
             return {
-                title: object.title,
-                summary: object.summary,
+                title: this.parseText(object.title),
+                summary: this.parseText(object.summary),
+                avgRating: this.getFixedAvg(object),
                 active: this.activeToString(object.active),
-                reviewModal: <MDBBtn color="blue-grey" outline size="sm">Leave a Review</MDBBtn>,
+                reviewModal: <MDBBtn color="blue-grey" outline size="sm">Review</MDBBtn>,
                 reviewTable: <NavLink activeClassName="active" to={{
-                    pathname:'/reviews',
-                    aboutProps: {legislationID: object.legislationID}
-                }}>
+                                        pathname:'/reviews',
+                                        aboutProps: {legislationID: object.legislationID}}}>
                                 <MDBBtn color="blue-grey" outline size="sm">View Reviews</MDBBtn>
                              </NavLink>
-
             }
         })
     }
