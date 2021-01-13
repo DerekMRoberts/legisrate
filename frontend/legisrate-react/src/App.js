@@ -3,8 +3,9 @@ import { Switch, Route } from "react-router-dom"
 import './App.css'
 import NavBar from "./components/nav_bar"
 import HomePage from './pages/home_page'
-import DashboardPage from './pages/dashboard_page'
 import AboutPage from './pages/about_page'
+
+const SERVICE_URL = "http://localhost:3000/api"
 
 class App extends Component {
     render() {
@@ -15,7 +16,6 @@ class App extends Component {
                     <Switch>
                         <Route exact path='/' component={HomePage}/>
                         <Route path='/home' component={HomePage}/>
-                        <Route path='/dashboard' component={DashboardPage}/>
                         <Route path='/about' component={AboutPage}/>
                     </Switch>
                 </main>
