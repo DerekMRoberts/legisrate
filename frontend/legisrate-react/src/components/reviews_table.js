@@ -92,8 +92,8 @@ class ReviewsTable extends React.Component {
 
         return reviewData.map((object)=> {
             return {
-                username: this.getUsername(object),
-                state: this.getState(object),
+                username: object.username,
+                state: object.state,
                 rating: object.rating,
                 comments: this.parseText(object.comments)
             }

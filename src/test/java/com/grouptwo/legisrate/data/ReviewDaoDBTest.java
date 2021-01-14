@@ -3,7 +3,6 @@ package com.grouptwo.legisrate.data;
 import com.grouptwo.legisrate.TestApplicationConfiguration;
 import com.grouptwo.legisrate.model.Legislation;
 import com.grouptwo.legisrate.model.Review;
-import com.grouptwo.legisrate.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +32,6 @@ class ReviewDaoDBTest {
 
     private final LegislationDao legislationDao;
     private final ReviewDao reviewDao;
-    private final UserDao userDao;
     private int legislationID;
     private int userID;
 
@@ -42,13 +40,11 @@ class ReviewDaoDBTest {
      * Constructs the ReviewDaoDBTest class
      * @param legislationDao a LegislationDao object
      * @param reviewDao a ReviewDao object
-     * @param userDao a UserDao object
      */
     @Autowired
-    public ReviewDaoDBTest(LegislationDao legislationDao, ReviewDao reviewDao, UserDao userDao) {
+    public ReviewDaoDBTest(LegislationDao legislationDao, ReviewDao reviewDao) {
         this.legislationDao = legislationDao;
         this.reviewDao = reviewDao;
-        this.userDao = userDao;
     }
 
     /**
@@ -66,27 +62,12 @@ class ReviewDaoDBTest {
             legislationDao.delete(legislation.getLegislationID());
         }
 
-        List<User> allUsers = userDao.getAllUsers();
-        for (User user : allUsers) {
-            userDao.delete(user.getUserID());
-        }
-
         Legislation legislation = new Legislation();
         legislation.setTitle("Title");
         legislation.setActive(true);
         legislation.setSummary("Summary");
-//        legislation.setSponsor("Sponsor");
-//        legislation.setPdfUrl("http://www.pdf.url");
         legislation = legislationDao.add(legislation);
         legislationID = legislation.getLegislationID();
-
-        User user = new User();
-        user.setUsername("Username");
-        user.setState("IL");
-//        user.setEmail("email@email.com");
-//        user.setPassword("########");
-        user = userDao.add(user);
-        userID = user.getUserID();
     }
 
     /**
@@ -98,9 +79,10 @@ class ReviewDaoDBTest {
     void testAddGetReview() {
         Review review = new Review();
         review.setLegislationID(legislationID);
-        review.setUserID(userID);
         review.setComments("Comments");
         review.setRating(1);
+        review.setUsername("Username");
+        review.setState("NY");
 
         review = reviewDao.add(review);
         Review fromDatabase = reviewDao.getReview(review.getReviewID());
@@ -116,21 +98,24 @@ class ReviewDaoDBTest {
     void testGetAllReviews() {
         Review review1 = new Review();
         review1.setLegislationID(legislationID);
-        review1.setUserID(userID);
         review1.setComments("Comments1");
         review1.setRating(1);
+        review1.setUsername("Username1");
+        review1.setState("NY");
 
         Review review2 = new Review();
         review2.setLegislationID(legislationID);
-        review2.setUserID(userID);
         review2.setComments("Comments2");
         review2.setRating(2);
+        review2.setUsername("Username2");
+        review2.setState("IL");
 
         Review review3 = new Review();
         review3.setLegislationID(legislationID);
-        review3.setUserID(userID);
         review3.setComments("Comments3");
         review3.setRating(3);
+        review3.setUsername("Username3");
+        review3.setState("KY");
 
         review1 = reviewDao.add(review1);
         review2 = reviewDao.add(review2);
@@ -151,15 +136,18 @@ class ReviewDaoDBTest {
     void testUpdate() {
         Review review = new Review();
         review.setLegislationID(legislationID);
-        review.setUserID(userID);
         review.setComments("Comments");
         review.setRating(4);
+        review.setUsername("Username");
+        review.setState("NY");
 
         review = reviewDao.add(review);
         Review fromDatabase = reviewDao.getReview(review.getReviewID());
 
         review.setComments("ChangedComments");
         review.setRating(5);
+        review.setUsername("Username");
+        review.setState("NY");
 
         reviewDao.update(review);
 
@@ -174,9 +162,10 @@ class ReviewDaoDBTest {
     void testDelete() {
         Review review = new Review();
         review.setLegislationID(legislationID);
-        review.setUserID(userID);
         review.setComments("Comments");
         review.setRating(1);
+        review.setUsername("Username");
+        review.setState("NY");
 
         review = reviewDao.add(review);
 

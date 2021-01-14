@@ -10,20 +10,13 @@ create table Legislation(
 	    Enacted boolean not null
 );
 
-create table Users (
-		UserId int primary key auto_increment not null,
-		Username varchar(30) not null,
-	    State char(2) not null
-);
-
 create table Review (
 		ReviewId int primary key auto_increment not null,
         LegislatureId int not null, 
-        UserID int not null, 
 		foreign key fk_Reviews_Legislation(LegislatureId)
 				references Legislation(LegislatureId),
-		foreign key fk_Reviews_Users(UserId)
-				references Users(UserId),
+		Username varchar(30) not null,
+	    UserState char(2) not null,
 		UserComment varchar(100) not null,
 		Rating int not null
 );

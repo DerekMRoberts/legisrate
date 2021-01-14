@@ -28,8 +28,6 @@ public class Legislation {
     private String summary;
     private boolean active;
     private double avgRating;
-    private String sponsor;  // add?
-    private String pdfUrl;  // add?
 
     /**
      * Gets the legislation ID
@@ -96,38 +94,6 @@ public class Legislation {
     }
 
     /**
-     * Gets the legislation sponsor
-     * @return the legislation sponsor
-     */
-    public String getSponsor() {
-        return sponsor;
-    }
-
-    /**
-     * Sets the legislation sponsor
-     * @param sponsor the legislation sponsor
-     */
-    public void setSponsor(String sponsor) {
-        this.sponsor = sponsor;
-    }
-
-    /**
-     * Gets the URL of the legislation pdf
-     * @return the URL of the legislation pdf
-     */
-    public String getPdfUrl() {
-        return pdfUrl;
-    }
-
-    /**
-     * Sets the URL of the legislation pdf
-     * @param pdfUrl the URL of the legislation pdf
-     */
-    public void setPdfUrl(String pdfUrl) {
-        this.pdfUrl = pdfUrl;
-    }
-
-    /**
      * Gets the average rating of the legislation
      * @return the average rating of the legislation
      */
@@ -153,7 +119,7 @@ public class Legislation {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Legislation that = (Legislation) o;
-        return legislationID == that.legislationID && active == that.active && Objects.equals(title, that.title) && Objects.equals(sponsor, that.sponsor) && Objects.equals(summary, that.summary) && Objects.equals(pdfUrl, that.pdfUrl);
+        return legislationID == that.legislationID && active == that.active && Double.compare(that.avgRating, avgRating) == 0 && Objects.equals(title, that.title) && Objects.equals(summary, that.summary);
     }
 
     /**
@@ -162,7 +128,7 @@ public class Legislation {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(legislationID, title, sponsor, active, summary, pdfUrl);
+        return Objects.hash(legislationID, title, summary, active, avgRating);
     }
 
     /**
@@ -176,8 +142,8 @@ public class Legislation {
                 ", title='" + title + '\'' +
                 ", summary='" + summary + '\'' +
                 ", active=" + active +
-                ", sponsor='" + sponsor + '\'' +
-                ", pdfUrl='" + pdfUrl + '\'' +
+                ", avgRating=" + avgRating +
                 '}';
     }
+
 }

@@ -3,7 +3,6 @@ package com.grouptwo.legisrate.data;
 import com.grouptwo.legisrate.TestApplicationConfiguration;
 import com.grouptwo.legisrate.model.Legislation;
 import com.grouptwo.legisrate.model.Review;
-import com.grouptwo.legisrate.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -33,19 +32,16 @@ class LegislationDaoDBTest {
 
     private final LegislationDao legislationDao;
     private final ReviewDao reviewDao;
-    private final UserDao userDao;
 
     /**
      * Constructs the LegislationDaoDBTest class
      * @param legislationDao a LegislationDao object
      * @param reviewDao a ReviewDao object
-     * @param userDao a UserDao object
      */
     @Autowired
-    public LegislationDaoDBTest(LegislationDao legislationDao, ReviewDao reviewDao, UserDao userDao) {
+    public LegislationDaoDBTest(LegislationDao legislationDao, ReviewDao reviewDao) {
         this.legislationDao = legislationDao;
         this.reviewDao = reviewDao;
-        this.userDao = userDao;
     }
 
     /**
@@ -63,10 +59,6 @@ class LegislationDaoDBTest {
             legislationDao.delete(legislation.getLegislationID());
         }
 
-        List<User> allUsers = userDao.getAllUsers();
-        for (User user : allUsers) {
-            userDao.delete(user.getUserID());
-        }
     }
 
     /**
@@ -80,8 +72,7 @@ class LegislationDaoDBTest {
         legislation.setTitle("Title");
         legislation.setActive(true);
         legislation.setSummary("Summary");
-//        legislation.setSponsor("Sponsor");
-//        legislation.setPdfUrl("http://www.pdf.url");
+        legislation.setAvgRating(1.0);
 
         legislation = legislationDao.add(legislation);
         Legislation fromDatabase = legislationDao.getLegislation(legislation.getLegislationID());
@@ -99,22 +90,16 @@ class LegislationDaoDBTest {
         legislation1.setTitle("Title1");
         legislation1.setActive(true);
         legislation1.setSummary("Summary1");
-//        legislation1.setSponsor("Sponsor1");
-//        legislation1.setPdfUrl("http://www.pdf1.url");
 
         Legislation legislation2 = new Legislation();
         legislation2.setTitle("Title2");
         legislation2.setActive(false);
         legislation2.setSummary("Summary2");
-//        legislation2.setSponsor("Sponsor2");
-//        legislation2.setPdfUrl("http://www.pdf2.url");
 
         Legislation legislation3 = new Legislation();
         legislation3.setTitle("Title3");
         legislation3.setActive(true);
         legislation3.setSummary("Summary3");
-//        legislation3.setSponsor("Sponsor3");
-//        legislation3.setPdfUrl("http://www.pdf3.url");
 
         legislation1 = legislationDao.add(legislation1);
         legislation2 = legislationDao.add(legislation2);
@@ -137,8 +122,6 @@ class LegislationDaoDBTest {
         legislation.setTitle("Title");
         legislation.setActive(true);
         legislation.setSummary("Summary");
-//        legislation.setSponsor("Sponsor");
-//        legislation.setPdfUrl("http://www.pdf.url");
 
         legislation = legislationDao.add(legislation);
         Legislation fromDatabase = legislationDao.getLegislation(legislation.getLegislationID());
@@ -146,8 +129,6 @@ class LegislationDaoDBTest {
         legislation.setTitle("ChangedTitle");
         legislation.setActive(false);
         legislation.setSummary("ChangedSummary");
-//        legislation.setSponsor("ChangedSponsor");
-//        legislation.setPdfUrl("http://www.changedpdf.url");
 
         legislationDao.update(legislation);
 
@@ -164,8 +145,6 @@ class LegislationDaoDBTest {
         legislation.setTitle("Title");
         legislation.setActive(true);
         legislation.setSummary("Summary");
-//        legislation.setSponsor("Sponsor");
-//        legislation.setPdfUrl("http://www.pdf.url");
 
         legislation = legislationDao.add(legislation);
 
