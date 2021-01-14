@@ -4,7 +4,9 @@ import './App.css'
 import NavBar from "./components/nav_bar"
 import HomePage from './pages/home_page'
 import AboutPage from './pages/about_page'
+import ReviewsForm from './components/reviews_form'
 import ReviewPage from './pages/reviews_page';
+
 
 class App extends Component {
     render() {
@@ -25,5 +27,3 @@ class App extends Component {
 }
 
 export default App
-
-
