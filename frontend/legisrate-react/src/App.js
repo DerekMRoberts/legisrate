@@ -5,6 +5,8 @@ import NavBar from "./components/nav_bar"
 import HomePage from './pages/home_page'
 import AboutPage from './pages/about_page'
 import ReviewsPage from "./pages/reviews_page";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Container, Row, Col } from "react-bootstrap";
 
 class App extends Component {
     render() {
@@ -25,5 +27,3 @@ class App extends Component {
 }
 
 export default App
-
-

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {MDBBtn, MDBDataTable} from 'mdbreact';
 import { view } from '@risingstack/react-easy-state'
 import {NavLink} from 'react-router-dom'
+import { Container, Row, Col } from "react-bootstrap";
+import ReviewModal from './reviews_modal'
 
 const SERVICE_URL = "http://localhost:3000/api"
 
@@ -9,10 +11,15 @@ class BillTable extends Component {
     constructor() {
         super();
         this.state = {
+            showAddModal: false,
             loading: false,
             legislationData: [{
+            }],
+            reviewData: [{
+                
             }]
         }
+
     }
 
     fetchLegislation() {
@@ -28,6 +35,7 @@ class BillTable extends Component {
 
     componentDidMount() {
         this.fetchLegislation()
+        this.loadReviewData
     }
 
     render() {
@@ -46,7 +54,18 @@ class BillTable extends Component {
                 responsive
                 maxHeight="70vh"
                 data={data}
-            />
+            />,
+
+            <Container fluid>
+                <ReviewModal 
+                show={this.state.showEditModal}
+                handleSubmit={this.handleAddFormSubmit}
+                handleChange={this.handleAddFormChange}
+                handleClose={this.handleAddModalClose}
+                reviewData={this.state.addReviewData}
+                reviewErrors={this.state.addFormErrors}/>
+            </Container>
+        
         )
     }
 
@@ -90,7 +109,13 @@ class BillTable extends Component {
                 title: object.title,
                 summary: object.summary,
                 active: this.activeToString(object.active),
-                reviewModal: <MDBBtn color="blue-grey" outline size="sm">Leave a Review</MDBBtn>,
+                reviewModal: <NavLink activeClassName="modal" to={{
+                    pathname: '/components/reviews_modal',
+                    aboutProps: {reviewId: object.reviewId}
+                }}>
+                    <MDBBtn color="blue-grey" outline size="sm">Leave a Review</MDBBtn>
+                    </NavLink>,
+
                 reviewTable: <NavLink activeClassName="active" to={{
                     pathname:'/reviews',
                     aboutProps: {legislationID: object.legislationID}
@@ -101,6 +126,44 @@ class BillTable extends Component {
             }
         })
     }
+
+    showModal = () => {
+        this.setState({ show: true })
+    }
+
+    handleAddModalClose = (event) => {
+        console.log('Closing Add Modal')
+        this.setState({showAddModal: false})
+    }
+
+    handleAddModalOpen = (event) => {
+        console.log('Opening Add Modal')
+        if (event) event.preventDefault();
+        const reviewId = event.target.value;
+        console.log(`Adding review id ${reviewId}`)
+    
+        //submit a GET request to the /legislation/{legislationId} endpoint
+        //the response should come back with the associated legislation's json
+        fetch(SERVICE_URL + '/review/' + reviewId)
+        .then(response => response.json())
+        .then(data => {
+          console.log('Success:', data);
+          this.setState({AddReviewData : data, showAddModal: true})
+        })
+        .catch((error) => {
+          console.error('Error:', error)
+        })
+    }
+
+    loadReviewData() {
+        this.setState({loading: true})
+        console.log("Loading review data")
+        fetch(SERVICE_URL + '/review')
+        .then(data => data.json())
+        .then(data => this.setState(
+          {reviewData: data, loading: false}
+        ))
+      }
 }
 
 export default view(BillTable)

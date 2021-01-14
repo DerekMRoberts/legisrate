@@ -1,9 +1,9 @@
-import React from "react"
+import React, {Component} from "react"
 import {MDBDataTable} from "mdbreact";
 
 const SERVICE_URL = "http://localhost:3000/api"
 
-class ReviewsPage extends React.Component {
+class ReviewsPage extends Component {
 
     constructor(props) {
         super(props);

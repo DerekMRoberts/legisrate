@@ -1,130 +1,104 @@
-import React, { Component } from 'react';
-import { MDBDataTable } from 'mdbreact';
-import { view } from '@risingstack/react-easy-state'
+import React from "react"
+import {MDBDataTableV5} from "mdbreact";
 
 const SERVICE_URL = "http://localhost:3000/api"
 
-class ReviewsTable extends Component {
+class ReviewsTable extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            legislationID: props.legislationID,
+            loading: false,
+            reviewData: [{
+            }]
+        }
+    }
+
+    fetchReviews() {
+        this.setState({ loading: true })
+        console.log("Loading review data")
+        fetch(SERVICE_URL + "/review/" + this.state.legislationID)
+            .then(response => response.json())
+            .then(result => {
+                this.setState({reviewData: result, loading: false})
+            })
+    }
+
+    componentDidMount() {
+        this.fetchReviews()
+    }
+
     render() {
         const data = {
             columns: this.getColumns(),
-            rows: this.getRows(SERVICE_URL + '/review/')
+            rows: this.getRows(this.state.reviewData)
         }
         return (
-            <
-                MDBDataTable
-                striped
-                bordered
-                hover
-                scrollX
-                responsive
-                maxHeight="50vh"
-                data={data}
-            />          
+            <div className="container-fluid">
+                <
+                    MDBDataTableV5
+                    hover
+                    entriesOptions={[5, 10, 15]}
+                    entries={5}
+                    maxHeight="70vh"
+                    data={data}
+                    pagingTop
+                    searchTop
+                    searchBottom={false}
+                />
+            </div>
         )
     }
 
-    getColumns(){
-        const reviewsTableColumns = [
-            { label: 'Review', field: 'UserComment', sort: 'asc', width: 60 },
-            { label: 'Rating', field: 'Rating', sort: 'asc', width: 3 }
+    getColumns() {
+        const reviewTableColumns = [
+            { label: 'Username', field: 'username', sort: 'asc', width: 50 },
+            { label: 'State', field: 'state', sort: 'asc', width: 75 },
+            { label: 'Rating', field: 'rating', sort: 'asc', width: 5 },
+            { label: 'Review', field: 'comments', sort: 'asc', width: 20 },
         ]
-        return reviewsTableColumns
+        return reviewTableColumns
     }
 
-    getRows(reviewsData) {
+    getUsername(object) {
+        if (object.hasOwnProperty("user")) {
+            return object["user"].username
+        }
+    }
+
+    getState(object) {
+        if (object.hasOwnProperty("user")) {
+            return object["user"].state
+        }
+    }
+
+    parseText(text) {
+        let parser = new DOMParser();
+        let dom = parser.parseFromString(
+            '<!doctype html><body>' + text,
+            'text/html');
+        return dom.body.textContent;
+    }
+
+    getRows(reviewData) {
         // Handle null case before reviews data is loaded
-        if ( reviewsData == null || typeof(reviewsData) == 'undefined') {
+        if ( reviewData == null || typeof( reviewData) == 'undefined') {
             return []
         }
 
         // Handle case with no reviews
-        if ( !( reviewsData.length > 0 ) ) { return [] }
+        if ( !( reviewData.length > 0 ) ) { return [] }
 
-        return reviewsData.map((object)=> {
-            const [ reviewYear, reviewMonth, _ ] = this.getTimeInfo(object.reviewTime)
-            console.log(_)
+        return reviewData.map((object)=> {
             return {
-                asin: object.asin,
-                reviewMonth: reviewMonth,
-                reviewYear: reviewYear,
-                reviewerID: object.reviewerID,
-                reviewerName: object.reviewerName,
-                score: object.overall,
-                summary: object.summary
+                username: this.getUsername(object),
+                state: this.getState(object),
+                rating: object.rating,
+                comments: this.parseText(object.comments)
             }
         })
     }
-
-
-    handleEditModalClose = (event) => {
-        console.log('Closing Edit Modal')
-        this.setState({showEditModal: false})
-      }
-    
-    handleEditModalOpen = (event) => {
-        console.log('Opening Edit Modal')
-        if (event) event.preventDefault();
-        const contactId = event.target.value;
-        console.log(`Editing contact id ${contactId}`)
-    
-        //submit a GET request to the /contact/{contactId} endpoint
-        //the response should come back with the associated contact's json
-        fetch(SERVICE_URL + '/review/' + legislationId)
-        .then(response => response.json())
-        .then(data => {
-          console.log('Success:', data);
-          this.setState({editReviewData : data, showEditModal: true})
-        })
-        .catch((error) => {
-          console.error('Error:', error)
-        })
-      }
-    
-    handleEditFormChange = (event) => {
-        const inputName = event.target.name;
-        const inputValue = event.target.value;
-        const contactInfo = this.state.editReviewData;
-    
-        console.log(`Something change in ${inputName} : ${inputValue}`)
-    
-        if(contactInfo.hasOwnProperty(inputName)) {
-          contactInfo[inputName] = inputValue;
-          this.setState({editContactData : contactInfo})
-        }
-      }
-    
-    
-    handleEditFormSubmit = (event) => {
-        if(event) event.preventDefault();
-        let contactId = event.target.value;
-        console.log(`Submitting edit for contact id ${ReviewId}`)
-        console.log(this.state.editContactData)
-    
-        let validationErrors = this.validateContact(this.state.editReviewData)
-        if(!validationErrors.isValid) {
-          console.log('Edited contact is invalid. Reporting errors')
-          this.setState({editFormErrors : validationErrors})
-          return
-        }
-    
-        fetch(SERVICE_URL + '/contact/' + contactId, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(this.state.editContactData),
-        })
-        .then(response => response.json())
-        .then(data => {
-          console.log('Success:', data);
-          this.setState({showEditModal : false, editFormErrors : validationErrors})
-          this.loadContactData();
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
-    }
 }
 
-export default view(ReviewsTable)
+export default ReviewsTable
