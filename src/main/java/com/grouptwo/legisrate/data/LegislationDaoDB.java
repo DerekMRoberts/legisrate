@@ -46,7 +46,8 @@ public class LegislationDaoDB implements LegislationDao {
      */
     @Override
     public Legislation add(Legislation legislation) {
-        final String sql = "INSERT INTO `Legislation`(`LegislationTitle`, `Enacted`, `Summary`/*, `Sponsor`, `PdfUrl`*/) VALUES(?, ?, ?/*, ?, ?*/);";
+        final String sql = "INSERT INTO `Legislation`" +
+                "(`LegislationTitle`, `Enacted`, `Summary`/*, `Sponsor`, `PdfUrl`*/) VALUES(?, ?, ?/*, ?, ?*/);";
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update((Connection conn) -> {
             PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -67,7 +68,9 @@ public class LegislationDaoDB implements LegislationDao {
      */
     @Override
     public List<Legislation> getAllLegislation() {
-        final String sql = "SELECT `LegislatureId`, `LegislationTitle`, `Enacted`, `Summary`/*, `Sponsor`, `PdfUrl`*/ FROM `Legislation`;";
+        final String sql = "SELECT L.LegislatureId, L.LegislationTitle, L.Enacted, L.Summary, AVG(R.Rating) " +
+                "AS AvgRating /*, `Sponsor`, `PdfUrl`*/ FROM Legislation L LEFT OUTER JOIN Review R " +
+                "ON R.LegislatureId = L.LegislatureId GROUP BY L.LegislatureId;";
         return jdbcTemplate.query(sql, new LegislationMapper());
     }
 
@@ -79,7 +82,9 @@ public class LegislationDaoDB implements LegislationDao {
     @Override
     public Legislation getLegislation(int legislationID) {
         try {
-            final String sql = "SELECT `LegislatureId`, `LegislationTitle`, `Enacted`, `Summary`/*, `Sponsor`, `PdfUrl`*/ FROM `Legislation` WHERE `LegislatureId` = ?;";
+            final String sql = "SELECT L.LegislatureId, L.LegislationTitle, L.Enacted, L.Summary, AVG(R.Rating)" +
+                    " AS AvgRating /*, `Sponsor`, `PdfUrl`*/ FROM Legislation L INNER JOIN Review R " +
+                    "ON R.LegislatureId = L.LegislatureId WHERE L.LegislatureId = ?;";
             return jdbcTemplate.queryForObject(sql, new LegislationMapper(), legislationID);
         } catch (DataAccessException e) {
             return null;
@@ -93,8 +98,10 @@ public class LegislationDaoDB implements LegislationDao {
      */
     @Override
     public boolean update(Legislation legislation) {
-        final String sql = "UPDATE `Legislation` SET `LegislationTitle` = ?, `Enacted` = ?, `Summary` = ?/*, `Sponsor` = ?, `PdfUrl` = ?*/ WHERE `LegislatureId` = ?;";
-        return jdbcTemplate.update(sql, legislation.getTitle(),/* legislation.getSponsor(),*/ legislation.isActive(), legislation.getSummary(),/* legislation.getPdfUrl(),*/ legislation.getLegislationID()) > 0;
+        final String sql = "UPDATE `Legislation` SET `LegislationTitle` = ?, `Enacted` = ?, `Summary` = ?" +
+                "/*, `Sponsor` = ?, `PdfUrl` = ?*/ WHERE `LegislatureId` = ?;";
+        return jdbcTemplate.update(sql, legislation.getTitle(),/* legislation.getSponsor(),*/ legislation.isActive(),
+                legislation.getSummary(),/* legislation.getPdfUrl(),*/ legislation.getLegislationID()) > 0;
     }
 
     /**
@@ -127,6 +134,7 @@ public class LegislationDaoDB implements LegislationDao {
             legislation.setTitle(rs.getString("LegislationTitle"));
             legislation.setActive(rs.getBoolean("Enacted"));
             legislation.setSummary(rs.getString("Summary"));
+            legislation.setAvgRating(rs.getDouble("AvgRating"));
 //            legislation.setSponsor(rs.getString("Sponsor"));
 //            legislation.setPdfUrl(rs.getString("PdfUrl"));
             return legislation;

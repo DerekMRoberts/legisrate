@@ -1,9 +1,10 @@
 import React, { Component } from "react"
-import { Switch, Route } from "react-router-dom"
+import {Switch, Route} from "react-router-dom"
 import './App.css'
 import NavBar from "./components/nav_bar"
 import HomePage from './pages/home_page'
 import AboutPage from './pages/about_page'
+import ReviewPage from './pages/reviews_page';
 
 class App extends Component {
     render() {
@@ -14,6 +15,7 @@ class App extends Component {
                     <Switch>
                         <Route exact path='/' component={HomePage} />
                         <Route path='/home' component={HomePage} />
+                        <Route path='/reviews' component={ReviewPage}/>
                         <Route path='/about' component={AboutPage} />
                     </Switch>
                 </main>

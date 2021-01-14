@@ -122,25 +122,13 @@ public class LegislationController {
         return ResponseEntity.ok(legislationDao.getLegislation(legislationID));
     }
 
-//    /**
-//     * Creates a REST endpoint for getting a specified review
-//     * @return the specified review if successful, otherwise the http 404 Not Found status code
-//     */
-//    @GetMapping("/review/{reviewID}")
-//    public ResponseEntity<Review> getReview(@PathVariable int reviewID) {
-//        if (reviewDao.getReview(reviewID) == null)
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//
-//        return ResponseEntity.ok(reviewDao.getReview(reviewID));
-//    }
-
     /**
-     * Creates a REST endpoint for getting all reviews for a specified legislationID
-     * @return a list of reviews with the specified legislationID if successful, otherwise the http 404 Not Found status code
+     * Creates a REST endpoint for getting a specified review
+     * @return the specified review if successful, otherwise the http 404 Not Found status code
      */
     @GetMapping("/review/{legislationID}")
-    public ResponseEntity<List<Review>> getReviewsByLegislationID(@PathVariable int legislationID) {
-        if (legislationDao.getLegislation(legislationID) == null)
+    public ResponseEntity<List<Review>> getReviews(@PathVariable int legislationID) {
+        if (reviewDao.getReviewsByLegislationID(legislationID) == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         return ResponseEntity.ok(reviewDao.getReviewsByLegislationID(legislationID));

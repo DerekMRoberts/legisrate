@@ -1,17 +1,20 @@
-import logo from "../logo.svg"
 import React from "react"
+import ReviewsTable from "../components/reviews_table";
 
-function ReviewsPage() {
-    return (
-        <div id="home_page">
-            <header className="App-header">
-                <p>
-                    TODO: Reviews Table
-                </p>
-
-            </header>
-        </div>
-    )
+class ReviewPage extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            legislationID: props.location.aboutProps.legislationID
+        }
+    }
+    render() {
+        return (
+            <div id="home_page" className="App-page">
+                <ReviewsTable legislationID={this.state.legislationID}/>
+            </div>
+        )
+    }
 }
 
-export default HomePage
+export default ReviewPage
