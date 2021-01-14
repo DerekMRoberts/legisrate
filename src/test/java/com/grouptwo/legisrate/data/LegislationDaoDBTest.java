@@ -3,7 +3,6 @@ package com.grouptwo.legisrate.data;
 import com.grouptwo.legisrate.TestApplicationConfiguration;
 import com.grouptwo.legisrate.model.Legislation;
 import com.grouptwo.legisrate.model.Review;
-import com.grouptwo.legisrate.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -73,6 +72,7 @@ class LegislationDaoDBTest {
         legislation.setTitle("Title");
         legislation.setActive(true);
         legislation.setSummary("Summary");
+        legislation.setAvgRating(1.0);
 
         legislation = legislationDao.add(legislation);
         Legislation fromDatabase = legislationDao.getLegislation(legislation.getLegislationID());
