@@ -27,6 +27,7 @@ public class Legislation {
     @Size(max = 90, message = "Legislation summary must be fewer than 90 characters")
     private String summary;
     private boolean active;
+    private double avgRating;
     private String sponsor;  // add?
     private String pdfUrl;  // add?
 
@@ -124,6 +125,22 @@ public class Legislation {
      */
     public void setPdfUrl(String pdfUrl) {
         this.pdfUrl = pdfUrl;
+    }
+
+    /**
+     * Gets the average rating of the legislation
+     * @return the average rating of the legislation
+     */
+    public double getAvgRating() {
+        return avgRating;
+    }
+
+    /**
+     * Sets the average rating of the legislation
+     * @param avgRating the average rating of the legislation
+     */
+    public void setAvgRating(double avgRating) {
+        this.avgRating = avgRating;
     }
 
     /**
