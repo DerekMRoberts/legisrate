@@ -16,13 +16,13 @@ INSERT  INTO Legislation (LegislationTitle, Summary, Enacted)  VALUES
 
 
 -- Sample Users
-INSERT INTO Users (Username, State) VALUES 
-("Aosaliu", "NY"), ("Rdtaylorjr", "NY"), ("JMRondello", "NY"), ("RoseBudmaria", "NY");
+-- INSERT INTO Users (Username, State) VALUES 
+-- ("Aosaliu", "NY"), ("Rdtaylorjr", "NY"), ("JMRondello", "NY"), ("RoseBudmaria", "NY");
 
 
 -- Sample Reviews
-INSERT INTO Review (LegislatureId, UserId, UserComment, Rating ) VALUES 
-("1", "1", "This is a terrible bill, I feel that it does not adequantly attend to the needs of the people" , "1"), 
-("2", "3", "I like this bill and believe it should be passed as it gives me the opportunity to change my life" , "5"),
-("3", "4" ,  "Im neutral and dont care if this bill is passed or not", "3");
+INSERT INTO Review (LegislatureId, Username, UserState, UserComment, Rating ) VALUES 
+("1", "Aosaliu", "NY", "This is a terrible bill, I feel that it does not adequantly attend to the needs of the people" , "1"), 
+("2", "JMRondello", "MA", "I like this bill and believe it should be passed as it gives me the opportunity to change my life" , "5"),
+("3", "RoseBudmaria", "NY",  "Im neutral and dont care if this bill is passed or not", "3");
 

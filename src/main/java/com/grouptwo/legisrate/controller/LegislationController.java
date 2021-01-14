@@ -2,13 +2,10 @@ package com.grouptwo.legisrate.controller;
 
 import com.grouptwo.legisrate.data.LegislationDao;
 import com.grouptwo.legisrate.data.ReviewDao;
-import com.grouptwo.legisrate.data.UserDao;
 import com.grouptwo.legisrate.exception.InvalidLegislationException;
 import com.grouptwo.legisrate.exception.InvalidReviewException;
-import com.grouptwo.legisrate.exception.InvalidUserException;
 import com.grouptwo.legisrate.model.Legislation;
 import com.grouptwo.legisrate.model.Review;
-import com.grouptwo.legisrate.model.User;
 
 import java.util.List;
 import javax.validation.Valid;
@@ -35,18 +32,15 @@ public class LegislationController {
 
     private final LegislationDao legislationDao;
     private final ReviewDao reviewDao;
-    private final UserDao userDao;
 
     /**
      * Constructs the LegislationController class
      * @param legislationDao the legislation data-access-object class
      * @param reviewDao the review data-access-object class
-     * @param userDao the user data-access-object class
      */
-    public LegislationController(LegislationDao legislationDao, ReviewDao reviewDao, UserDao userDao) {
+    public LegislationController(LegislationDao legislationDao, ReviewDao reviewDao) {
         this.legislationDao = legislationDao;
         this.reviewDao = reviewDao;
-        this.userDao = userDao;
     }
 
     /**
@@ -55,7 +49,7 @@ public class LegislationController {
      */
     @PostMapping("/legislation")
     @ResponseStatus(HttpStatus.CREATED)
-    public Legislation addLegislation(@Valid @RequestBody Legislation legislation) throws InvalidLegislationException {
+    public Legislation addLegislation(@Valid @RequestBody Legislation legislation) {
         return legislationDao.add(legislation);
     }
 
@@ -66,21 +60,11 @@ public class LegislationController {
     @PostMapping("/review")
     @ResponseStatus(HttpStatus.CREATED)
     public Review addReview(@Valid @RequestBody Review review) throws InvalidReviewException {
-        if (legislationDao.getLegislation(review.getLegislationID()) == null || userDao.getUser(review.getUserID()) == null ||
+        if (legislationDao.getLegislation(review.getLegislationID()) == null ||
                 review.getRating() < 1 || review.getRating() > 5)
             throw new InvalidReviewException(review.toString());
         else
             return reviewDao.add(review);
-    }
-
-    /**
-     * Creates a REST endpoint for adding a new user to the database
-     * @return the added user and the http 201 Created status code
-     */
-    @PostMapping("/user")
-    @ResponseStatus(HttpStatus.CREATED)
-    public User addUser(@Valid @RequestBody User user) throws InvalidUserException {
-        return userDao.add(user);
     }
 
     /**
@@ -99,15 +83,6 @@ public class LegislationController {
     @GetMapping("/review")
     public List<Review> getAllReviews() {
         return reviewDao.getAllReviews();
-    }
-
-    /**
-     * Creates a REST endpoint for getting a list of all users
-     * @return the list of all users
-     */
-    @GetMapping("/user")
-    public List<User> getAllUsers() {
-        return userDao.getAllUsers();
     }
 
     /**
@@ -135,18 +110,6 @@ public class LegislationController {
     }
 
     /**
-     * Creates a REST endpoint for getting a specified user
-     * @return the specified user if successful, otherwise the http 404 Not Found status code
-     */
-    @GetMapping("/user/{userID}")
-    public ResponseEntity<User> getUser(@PathVariable int userID) {
-        if (userDao.getUser(userID) == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        return ResponseEntity.ok(userDao.getUser(userID));
-    }
-
-    /**
      * Creates a REST endpoint for updating a specified legislation
      * @return the updated legislation if successful, otherwise the http 404 Not Found status code
      */
@@ -166,26 +129,12 @@ public class LegislationController {
      */
     @PutMapping("/review/{reviewID}")
     public ResponseEntity<Review> updateReview(@PathVariable int reviewID, @Valid @RequestBody Review review) throws InvalidReviewException {
-        if (reviewID != review.getReviewID() || legislationDao.getLegislation(review.getLegislationID()) == null || userDao.getUser(review.getUserID()) == null || review.getRating() < 1 || review.getRating() > 5)
+        if (reviewID != review.getReviewID() || legislationDao.getLegislation(review.getLegislationID()) == null || review.getRating() < 1 || review.getRating() > 5)
             throw new InvalidReviewException(review.toString());
         if (!reviewDao.update(review))
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         return ResponseEntity.ok(reviewDao.getReview(reviewID));
-    }
-
-    /**
-     * Creates a REST endpoint for updating a specified user
-     * @return the updated user if successful, otherwise the http 404 Not Found status code
-     */
-    @PutMapping("/user/{userID}")
-    public ResponseEntity<User> updateUser(@PathVariable int userID, @Valid @RequestBody User user) throws InvalidUserException {
-        if (userID != user.getUserID())
-            throw new InvalidUserException(user.toString());
-        if (!userDao.update(user))
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        return ResponseEntity.ok(userDao.getUser(userID));
     }
 
     /**
@@ -207,18 +156,6 @@ public class LegislationController {
     @DeleteMapping("/review/{reviewID}")
     public ResponseEntity<Error> deleteReview(@PathVariable int reviewID) {
         if (reviewDao.delete(reviewID))
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    /**
-     * Creates a REST endpoint for deleting a specified user
-     * @return the http 204 No Content status code if successful, otherwise the http 404 Not Found status code
-     */
-    @DeleteMapping("/user/{userID}")
-    public ResponseEntity<Error> deleteUser(@PathVariable int userID) {
-        if (userDao.delete(userID))
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
