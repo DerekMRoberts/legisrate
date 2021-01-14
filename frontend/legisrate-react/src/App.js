@@ -4,8 +4,9 @@ import './App.css'
 import NavBar from "./components/nav_bar"
 import HomePage from './pages/home_page'
 import AboutPage from './pages/about_page'
-import ReviewsForm from './components/reviews_form'
-import ReviewPage from './pages/reviews_page';
+import ReviewForm from './components/reviews_form'
+import AddReviewPage from './pages/add_review_page'
+import ReviewPage from './pages/reviews_page'
 
 
 class App extends Component {
@@ -19,6 +20,7 @@ class App extends Component {
                         <Route path='/home' component={HomePage} />
                         <Route path='/reviews' component={ReviewPage}/>
                         <Route path='/about' component={AboutPage} />
+                        <Route path='/review' component={AddReviewPage} />
                     </Switch>
                 </main>
             </div>

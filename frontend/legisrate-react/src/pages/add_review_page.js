@@ -1,17 +1,20 @@
 import React from "react"
-import ReviewsTable from "../components/reviews_table";
+import ReviewForm from "../components/reviews_form"
+
 
 class AddReviewPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            legislationID: props.location.aboutProps.reviewID
+            legislationID: props.location.aboutProps.legislationID
         }
     }
+
+
     render() {
         return (
             <div id="home_page" className="App-page">
-                <AddReviewsTable reviewID={this.state.reviewID}/>
+                <ReviewForm legislationID={this.state.legislationID}/>
             </div>
         )
     }

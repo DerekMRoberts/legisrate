@@ -13,7 +13,6 @@ class BillTable extends Component {
             legislationData: [{
             }]
         }
-        }
     }
 
     fetchLegislation() {
@@ -109,15 +108,15 @@ class BillTable extends Component {
                 avgRating: this.getFixedAvg(object),
                 active: this.activeToString(object.active),
                 reviewModal: <NavLink activeClassName="active" to={{
-                    pathname:'/reviews',
-                    aboutProps: {reviewID: object.reviewID}}}>
+                    pathname:'/review',
+                    aboutProps: {legislationID: object.legislationID}}}>
                     <MDBBtn color="blue-grey" outline size="sm">Add Review</MDBBtn>
                 </NavLink>,
                 reviewTable: <NavLink activeClassName="active" to={{
-                                        pathname:'/reviews',
-                                        aboutProps: {legislationID: object.legislationID}}}>
-                                <MDBBtn color="blue-grey" outline size="sm">View Reviews</MDBBtn>
-                             </NavLink>
+                    pathname:'/reviews',
+                    aboutProps: {legislationID: object.legislationID}}}>
+                    <MDBBtn color="blue-grey" outline size="sm">View Reviews</MDBBtn>
+                </NavLink>
             }
         })
     }
