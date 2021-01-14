@@ -58,19 +58,6 @@ public class LegislationControllerExceptionHandler extends Exception {
     }
 
     /**
-     * Handles Invalid User Exceptions
-     * @param ex the exception
-     * @param request the request
-     * @return the http 422 Unprocessable Entity status code
-     */
-    @ExceptionHandler(InvalidUserException.class)
-    public final ResponseEntity<Error> handleInvalidUserException(InvalidUserException ex, WebRequest request) {
-        Error err = new Error();
-        err.setMessage("Could not create or update user. The required request body is missing or invalid. Please ensure the request is valid and try again.");
-        return new ResponseEntity<>(err, HttpStatus.UNPROCESSABLE_ENTITY);
-    }
-
-    /**
      * Handles Http Message Not Readable Exceptions
      * @param ex the exception
      * @param request the request
