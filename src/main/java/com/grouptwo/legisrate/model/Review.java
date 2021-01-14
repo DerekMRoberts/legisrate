@@ -23,10 +23,13 @@ public class Review {
     @NotNull(message = "Legislation ID must not be empty.")
     private int legislationID;
     @NotNull(message = "User ID must not be empty.")
-    private int userID;
-    private User user;
     private String comments;
     private int rating;
+    @NotBlank(message = "Username must not be empty.")
+    @Size(max = 30, message="Username must be fewer than 30 characters.")
+    private String username;
+    @Size(min = 2, max = 2, message="State must be 2 characters.")
+    private String state;
 
     /**
      * Gets the review ID
@@ -58,22 +61,6 @@ public class Review {
      */
     public void setLegislationID(int legislationID) {
         this.legislationID = legislationID;
-    }
-
-    /**
-     * Gets the user ID
-     * @return the user ID
-     */
-    public int getUserID() {
-        return userID;
-    }
-
-    /**
-     * Sets the user ID
-     * @param userID the user ID
-     */
-    public void setUserID(int userID) {
-        this.userID = userID;
     }
 
     /**
@@ -109,55 +96,71 @@ public class Review {
     }
 
     /**
-     * Gets the user who left the review
-     * @return the user
+     *
+     * @return
      */
-    public User getUser() {
-        return user;
+    public String getUsername() {
+        return username;
     }
 
     /**
-     * Sets the user who left the review
-     * @param user the user
+     *
+     * @param username
      */
-    public void setUser(User user) {
-        this.user = user;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getState() {
+        return state;
+    }
+
+    /**
+     *
+     * @param state
+     */
+    public void setState(String state) {
+        this.state = state;
     }
 
     /**
      * Determines whether two Review objects are equal
-      @param o the object to be compared with the current object
+     * @param o the object to be compared with the current object
      * @return a boolean indicating whether the two objects are equal
      */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Review review = (Review) o;
-        return reviewID == review.reviewID && legislationID == review.legislationID && userID == review.userID && rating == review.rating && Objects.equals(comments, review.comments);
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        if (!super.equals(object)) return false;
+        Review review = (Review) object;
+        return reviewID == review.reviewID && legislationID == review.legislationID && rating == review.rating && java.util.Objects.equals(comments, review.comments) && java.util.Objects.equals(username, review.username) && java.util.Objects.equals(state, review.state);
     }
 
     /**
      * Overrides the hashCode() method
      * @return the object as a hash
      */
-    @Override
     public int hashCode() {
-        return Objects.hash(reviewID, legislationID, userID, comments, rating);
+        return Objects.hash(super.hashCode(), reviewID, legislationID, comments, rating, username, state);
     }
 
     /**
      * Overrides the toString() method
      * @return the object as a String
      */
-    @Override
-    public String toString() {
+    @java.lang.Override
+    public java.lang.String toString() {
         return "Review{" +
                 "reviewID=" + reviewID +
                 ", legislationID=" + legislationID +
-                ", userID=" + userID +
                 ", comments='" + comments + '\'' +
                 ", rating=" + rating +
+                ", username='" + username + '\'' +
+                ", state='" + state + '\'' +
                 '}';
     }
 
