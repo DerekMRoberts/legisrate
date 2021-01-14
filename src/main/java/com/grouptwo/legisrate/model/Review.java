@@ -96,32 +96,32 @@ public class Review {
     }
 
     /**
-     *
-     * @return
+     * Gets the username
+     * @return the username
      */
     public String getUsername() {
         return username;
     }
 
     /**
-     *
-     * @param username
+     * Sets the username
+     * @param username the username
      */
     public void setUsername(String username) {
         this.username = username;
     }
 
     /**
-     *
-     * @return
+     * Gets the state
+     * @return the state
      */
     public String getState() {
         return state;
     }
 
     /**
-     *
-     * @param state
+     * Sets the state
+     * @param state the state
      */
     public void setState(String state) {
         this.state = state;
@@ -132,28 +132,29 @@ public class Review {
      * @param o the object to be compared with the current object
      * @return a boolean indicating whether the two objects are equal
      */
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        if (!super.equals(object)) return false;
-        Review review = (Review) object;
-        return reviewID == review.reviewID && legislationID == review.legislationID && rating == review.rating && java.util.Objects.equals(comments, review.comments) && java.util.Objects.equals(username, review.username) && java.util.Objects.equals(state, review.state);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Review review = (Review) o;
+        return reviewID == review.reviewID && legislationID == review.legislationID && rating == review.rating && Objects.equals(comments, review.comments) && Objects.equals(username, review.username) && Objects.equals(state, review.state);
     }
 
     /**
      * Overrides the hashCode() method
      * @return the object as a hash
      */
+    @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), reviewID, legislationID, comments, rating, username, state);
+        return Objects.hash(reviewID, legislationID, comments, rating, username, state);
     }
 
     /**
      * Overrides the toString() method
      * @return the object as a String
      */
-    @java.lang.Override
-    public java.lang.String toString() {
+    @Override
+    public String toString() {
         return "Review{" +
                 "reviewID=" + reviewID +
                 ", legislationID=" + legislationID +
