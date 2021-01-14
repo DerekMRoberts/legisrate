@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import {MDBBtn, MDBDataTable} from 'mdbreact';
+import {MDBBtn, MDBDataTableV5 } from 'mdbreact';
 import { view } from '@risingstack/react-easy-state'
 import {NavLink} from 'react-router-dom'
-import { Container, Row, Col } from "react-bootstrap";
-import ReviewModal from './reviews_modal'
 
 const SERVICE_URL = "http://localhost:3000/api"
 
@@ -11,19 +9,13 @@ class BillTable extends Component {
     constructor() {
         super();
         this.state = {
-            showAddModal: false,
             loading: false,
             legislationData: [{
-            }],
-            reviewData: [{
-                
             }]
         }
-
     }
 
     fetchLegislation() {
-        console.log("Table is now mounted.")
         this.setState({ loading: true })
         console.log("Loading legislation data")
         fetch(SERVICE_URL + "/legislation")
@@ -35,7 +27,6 @@ class BillTable extends Component {
 
     componentDidMount() {
         this.fetchLegislation()
-        this.loadReviewData
     }
 
     render() {
@@ -44,28 +35,20 @@ class BillTable extends Component {
             rows: this.getRows(this.state.legislationData)
         }
         return (
-
-            <
-                MDBDataTable
-                striped
-                bordered
-                hover
-                scrollX
-                responsive
-                maxHeight="70vh"
-                data={data}
-            />,
-
-            <Container fluid>
-                <ReviewModal 
-                show={this.state.showEditModal}
-                handleSubmit={this.handleAddFormSubmit}
-                handleChange={this.handleAddFormChange}
-                handleClose={this.handleAddModalClose}
-                reviewData={this.state.addReviewData}
-                reviewErrors={this.state.addFormErrors}/>
-            </Container>
-        
+            <div className="container-fluid">
+                <
+                    MDBDataTableV5
+                    hover
+                    entriesOptions={[5, 10, 15]}
+                    entries={5}
+                    maxHeight="70vh"
+                    autoWidth
+                    data={data}
+                    pagingTop
+                    searchTop
+                    searchBottom={false}
+                />
+            </div>
         )
     }
 
@@ -77,11 +60,26 @@ class BillTable extends Component {
         }
     }
 
+    getFixedAvg(object) {
+        if (object.hasOwnProperty("avgRating")) {
+            return object["avgRating"].toFixed(2)
+        }
+    }
+
+    parseText(text) {
+        let parser = new DOMParser();
+        let dom = parser.parseFromString(
+            '<!doctype html><body>' + text,
+            'text/html');
+        return dom.body.textContent;
+    }
+
     getColumns() {
         const legislationTableColumns = [
-            { label: 'Title', field: 'title', sort: 'asc', width: 70 },
-            { label: 'Summary', field: 'summary', sort: 'asc', width: 250 },
-            { label: 'Enacted', field: 'active', sort: 'disabled', width: 25 },
+            { label: 'Title', field: 'title', sort: 'disabled', width: 30},
+            { label: 'Summary', field: 'summary', sort: 'disabled', width: 40 },
+            { label: 'Avg. Rating', field: 'avgRating', sort: 'asc', width: 10 },
+            { label: 'Enacted', field: 'active', sort: 'disabled', width: 10 },
             { label: '', field: 'reviewModal', sort: 'disabled', width: 10 },
             { label: '', field: 'reviewTable', sort: 'disabled', width: 10 },
         ]
@@ -90,7 +88,6 @@ class BillTable extends Component {
 
     getRows(legislationData) {
         // Handle null case before reviews data is loaded
-        console.log(this.state.legislationData)
         if ( legislationData == null || typeof( legislationData) == 'undefined') {
             return [{
                 title: "Didn't Work",
@@ -106,64 +103,19 @@ class BillTable extends Component {
 
         return legislationData.map((object)=> {
             return {
-                title: object.title,
-                summary: object.summary,
+                title: this.parseText(object.title),
+                summary: this.parseText(object.summary),
+                avgRating: this.getFixedAvg(object),
                 active: this.activeToString(object.active),
-                reviewModal: <NavLink activeClassName="modal" to={{
-                    pathname: '/components/reviews_modal',
-                    aboutProps: {reviewId: object.reviewId}
-                }}>
-                    <MDBBtn color="blue-grey" outline size="sm">Leave a Review</MDBBtn>
-                    </NavLink>,
-
+                reviewModal: <MDBBtn color="blue-grey" outline size="sm">Review</MDBBtn>,
                 reviewTable: <NavLink activeClassName="active" to={{
-                    pathname:'/reviews',
-                    aboutProps: {legislationID: object.legislationID}
-                }}>
+                                        pathname:'/reviews',
+                                        aboutProps: {legislationID: object.legislationID}}}>
                                 <MDBBtn color="blue-grey" outline size="sm">View Reviews</MDBBtn>
                              </NavLink>
-
             }
         })
     }
-
-    showModal = () => {
-        this.setState({ show: true })
-    }
-
-    handleAddModalClose = (event) => {
-        console.log('Closing Add Modal')
-        this.setState({showAddModal: false})
-    }
-
-    handleAddModalOpen = (event) => {
-        console.log('Opening Add Modal')
-        if (event) event.preventDefault();
-        const reviewId = event.target.value;
-        console.log(`Adding review id ${reviewId}`)
-    
-        //submit a GET request to the /legislation/{legislationId} endpoint
-        //the response should come back with the associated legislation's json
-        fetch(SERVICE_URL + '/review/' + reviewId)
-        .then(response => response.json())
-        .then(data => {
-          console.log('Success:', data);
-          this.setState({AddReviewData : data, showAddModal: true})
-        })
-        .catch((error) => {
-          console.error('Error:', error)
-        })
-    }
-
-    loadReviewData() {
-        this.setState({loading: true})
-        console.log("Loading review data")
-        fetch(SERVICE_URL + '/review')
-        .then(data => data.json())
-        .then(data => this.setState(
-          {reviewData: data, loading: false}
-        ))
-      }
 }
 
 export default view(BillTable)

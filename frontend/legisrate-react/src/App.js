@@ -4,9 +4,7 @@ import './App.css'
 import NavBar from "./components/nav_bar"
 import HomePage from './pages/home_page'
 import AboutPage from './pages/about_page'
-import ReviewsPage from "./pages/reviews_page";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Container, Row, Col } from "react-bootstrap";
+import ReviewPage from './pages/reviews_page';
 
 class App extends Component {
     render() {
@@ -17,7 +15,7 @@ class App extends Component {
                     <Switch>
                         <Route exact path='/' component={HomePage} />
                         <Route path='/home' component={HomePage} />
-                        <Route path='/reviews' component={ReviewsPage}/>
+                        <Route path='/reviews' component={ReviewPage}/>
                         <Route path='/about' component={AboutPage} />
                     </Switch>
                 </main>
@@ -27,3 +25,5 @@ class App extends Component {
 }
 
 export default App
+
+
