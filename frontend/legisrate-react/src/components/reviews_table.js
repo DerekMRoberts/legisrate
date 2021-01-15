@@ -1,7 +1,7 @@
 import React from "react"
 import {MDBDataTableV5} from "mdbreact";
 
-const SERVICE_URL = "http://localhost:3000/api"
+const SERVICE_URL = "http://localhost:8080/api"
 
 class ReviewsTable extends React.Component {
 

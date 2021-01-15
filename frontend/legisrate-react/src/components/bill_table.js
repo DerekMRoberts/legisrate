@@ -3,7 +3,7 @@ import {MDBBtn, MDBDataTableV5 } from 'mdbreact';
 import { view } from '@risingstack/react-easy-state'
 import {NavLink} from 'react-router-dom'
 
-const SERVICE_URL = "http://localhost:3000/api"
+const SERVICE_URL = "http://localhost:8080/api"
 
 class BillTable extends Component {
     constructor() {

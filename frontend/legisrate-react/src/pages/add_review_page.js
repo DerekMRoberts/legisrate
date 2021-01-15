@@ -5,6 +5,7 @@ import ReviewForm from "../components/reviews_form"
 class AddReviewPage extends React.Component {
     constructor(props) {
         super(props);
+        console.log(props)
         this.state = {
             legislationID: props.location.aboutProps.legislationID
         }

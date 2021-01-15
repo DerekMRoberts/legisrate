@@ -42,6 +42,5 @@
   "devDependencies": {
     "history": "^4.10.1",
     "react-router-dom": "^5.2.0"
-  },
-  "proxy": "http://localhost:8080"
+  }
 }

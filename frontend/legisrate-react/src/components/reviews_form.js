@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { Form, Button } from 'react-bootstrap'
 import AddReviewPage from "../pages/reviews_page"
 
-const SERVICE_URL = "http://localhost:3000/api"
+const SERVICE_URL = "http://localhost:8080/api"
 
 
 class ReviewForm extends Component {
@@ -11,12 +11,12 @@ class ReviewForm extends Component {
         console.log(props)
         this.state = {
             legislationID: props.legislationID,
-            username: '',
-            state: '',
-            rating: '',
-            comments: ''
+            username: 'roseflower',
+            state: 'TN',
+            rating: 0,
+            comments: 'This was pretty cool.'
         }
-        this.handleSubmit = this.handleSubmit.bind(this)
+        this.handleClick = this.handleClick.bind(this)
         this.handleInput = this.handleInput.bind(this)
     }
 
@@ -27,21 +27,23 @@ class ReviewForm extends Component {
         })
     }
 
-    handleSubmit = (event) => {
+    handleClick() {
         console.log(this.state)
-        event.preventDefault()
         const postReview = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                username: this.state.username,
-                state: this.state.state,
-                rating:this.state.rating,
-                comments: this.state.comments
+                legislationID: 1,
+                username: 'roseflower',
+                state: 'TN',
+                rating: 1,
+                comments: 'This was pretty cool.'
             })
         }
 
-        fetch(SERVICE_URL + "/review/" + this.state.legislationID, postReview)
+        fetch(SERVICE_URL + "/review/", postReview)
+            .then(response => response.json())
+            .then(data => console.log(data))
     };
 
 
@@ -121,7 +123,7 @@ class ReviewForm extends Component {
                     <Form.Label>Add Review:</Form.Label>
                     <Form.Control as="textarea" rows={3} placeholder="Add Review" name="comments"/>
                 </Form.Group>
-                <Button type="submit">
+                <Button onClick={this.handleClick} type="button">
                     Submit
                 </Button>
             </Form>

@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
  * Controls the REST web service interface
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/api")
 public class LegislationController {
 
