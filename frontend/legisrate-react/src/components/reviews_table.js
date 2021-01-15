@@ -61,18 +61,6 @@ class ReviewsTable extends React.Component {
         return reviewTableColumns
     }
 
-    getUsername(object) {
-        if (object.hasOwnProperty("user")) {
-            return object["user"].username
-        }
-    }
-
-    getState(object) {
-        if (object.hasOwnProperty("user")) {
-            return object["user"].state
-        }
-    }
-
     parseText(text) {
         let parser = new DOMParser();
         let dom = parser.parseFromString(
