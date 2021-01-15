@@ -3,7 +3,7 @@ import {MDBBtn, MDBDataTableV5 } from 'mdbreact';
 import { view } from '@risingstack/react-easy-state'
 import {NavLink} from 'react-router-dom'
 
-const SERVICE_URL = "http://localhost:3000/api"
+const SERVICE_URL = "http://localhost:8080/api"
 
 class BillTable extends Component {
     constructor() {
@@ -107,12 +107,16 @@ class BillTable extends Component {
                 summary: this.parseText(object.summary),
                 avgRating: this.getFixedAvg(object),
                 active: this.activeToString(object.active),
-                reviewModal: <MDBBtn color="blue-grey" outline size="sm">Review</MDBBtn>,
+                reviewModal: <NavLink activeClassName="active" to={{
+                    pathname:'/review',
+                    aboutProps: {legislationID: object.legislationID}}}>
+                    <MDBBtn color="blue-grey" outline size="sm">Add Review</MDBBtn>
+                </NavLink>,
                 reviewTable: <NavLink activeClassName="active" to={{
-                                        pathname:'/reviews',
-                                        aboutProps: {legislationID: object.legislationID}}}>
-                                <MDBBtn color="blue-grey" outline size="sm">View Reviews</MDBBtn>
-                             </NavLink>
+                    pathname:'/reviews',
+                    aboutProps: {legislationID: object.legislationID}}}>
+                    <MDBBtn color="blue-grey" outline size="sm">View Reviews</MDBBtn>
+                </NavLink>
             }
         })
     }
