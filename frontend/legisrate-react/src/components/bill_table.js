@@ -110,12 +110,12 @@ class BillTable extends Component {
                 reviewModal: <NavLink activeClassName="active" to={{
                     pathname:'/review',
                     aboutProps: {legislationID: object.legislationID}}}>
-                    <MDBBtn color="blue-grey" outline size="sm">Add Review</MDBBtn>
+                    <MDBBtn rounded color="black">Add Review</MDBBtn>
                 </NavLink>,
                 reviewTable: <NavLink activeClassName="active" to={{
                     pathname:'/reviews',
                     aboutProps: {legislationID: object.legislationID}}}>
-                    <MDBBtn color="blue-grey" outline size="sm">View Reviews</MDBBtn>
+                    <MDBBtn rounded color="black">View Reviews</MDBBtn>
                 </NavLink>
             }
         })
