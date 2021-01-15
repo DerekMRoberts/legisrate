@@ -17,6 +17,6 @@ create table Review (
 				references Legislation(LegislatureId),
 		Username varchar(30) not null,
 	    UserState char(2) not null,
-		UserComment varchar(100) not null,
+		UserComment varchar(2000) not null,
 		Rating int not null
 );
